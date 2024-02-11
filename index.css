@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 180 4% 5%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 180 4% 5%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 180 4% 5%;
+
+    --primary: 163 91% 39%;
+    --primary-foreground: 0 0% 2%;
+
+    --secondary: 210 16% 93%;
+    --secondary-foreground: 180 4% 5%;
+
+    --muted: 240 7% 97%;
+    --muted-foreground: 210 3% 40%;
+
+    --accent: 240 7% 97%;
+    --accent-foreground: 180 4% 5%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 210 11% 93%;
+    --input: 210 16% 87%;
+    --ring: 163 91% 39%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 206 13% 11%;
+    --foreground: 140 16% 96%;
+
+    --card: 218 12% 13%;
+    --card-foreground: 140 16% 96%;
+
+    --popover: 218 9% 17%;
+    --popover-foreground: 140 16% 96%;
+
+    --primary: 163 91% 39%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 283 4% 65%;
+    --secondary-foreground: 140 16% 96%;
+
+    --muted: 240 18% 12%;
+    --muted-foreground: 240 8% 60%;
+
+    --accent: 218 9% 27%;
+    --accent-foreground: 140 16% 96%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 218 9% 27%;
+    --input: 218 9% 27%;
+    --ring: 163 91% 39%;
+  }
+}
+
+@layer base {
+  * {
+    @apply text-base;
+  }
+
+  /* check if prefers-color-scheme is dark */
+  @media (prefers-color-scheme: dark) {
+    body {
+      @apply dark;
+    }
+  }
+}
