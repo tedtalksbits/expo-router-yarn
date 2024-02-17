@@ -29,17 +29,14 @@ export const useToast = () => {
   const { addToast, removeToast } = context;
 
   const toast = {
-    success: (title: string, description?: string, icon?: React.ReactNode) =>
+    success: ({ title, description, icon }: Omit<Toast, 'id' | 'type'>) =>
       addToast({ title, description, icon, type: 'success' }),
-    info: (title: string, description?: string, icon?: React.ReactNode) =>
+    info: ({ title, description, icon }: Omit<Toast, 'id' | 'type'>) =>
       addToast({ title, description, icon, type: 'info' }),
-    warning: (title: string, description?: string, icon?: React.ReactNode) =>
+    warning: ({ title, description, icon }: Omit<Toast, 'id' | 'type'>) =>
       addToast({ title, description, icon, type: 'warning' }),
-    destructive: (
-      title: string,
-      description?: string,
-      icon?: React.ReactNode
-    ) => addToast({ title, description, icon, type: 'destructive' }),
+    destructive: ({ title, description, icon }: Omit<Toast, 'id' | 'type'>) =>
+      addToast({ title, description, icon, type: 'destructive' }),
   };
 
   return { toast, removeToast };
@@ -54,6 +51,10 @@ const ToastProvider = ({ children }: ToastProviderProps) => {
   const [offset, setOffset] = useState(40);
 
   const addToast = (toast: Omit<Toast, 'id'>) => {
+    // limit toasts to 3
+    if (toasts.length >= 3) {
+      removeToast(toasts[0].id);
+    }
     const id = Date.now().toString();
     const newToast = { ...toast, id };
     setToasts((prevToasts) => [...prevToasts, newToast]);
@@ -72,6 +73,7 @@ const ToastProvider = ({ children }: ToastProviderProps) => {
             key={toast.id}
             toast={toast}
             offset={offset + i * (TOAST_HEIGHT - 40)}
+            index={i}
           />
         ))}
       </View>
@@ -80,17 +82,25 @@ const ToastProvider = ({ children }: ToastProviderProps) => {
 };
 
 // Toast component
-const Toast = ({ toast, offset }: { toast: Toast; offset?: number }) => {
+const Toast = ({
+  toast,
+  offset,
+  index,
+}: {
+  toast: Toast;
+  offset?: number;
+  index: number;
+}) => {
   const [animation] = useState(new Animated.Value(0)); // initial value for opacity: 0
   const { type, title, description, icon } = toast;
   const { removeToast } = useToast();
   const { themeColors } = useTheme();
   const { foreground, primary, success, destructive } = themeColors;
   const bgClassName = {
-    info: primary.bg(),
-    success: success.bg(),
+    info: primary.bg(offset),
+    success: success.bg(offset),
     warning: '#FFA500',
-    destructive: destructive.bg(),
+    destructive: destructive.bg(offset),
   }[type];
 
   useEffect(() => {
