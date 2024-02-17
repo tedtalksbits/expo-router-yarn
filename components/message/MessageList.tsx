@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTheme } from '@/hooks/useTheme';
+import { Link } from '../ui/Link';
 interface Message {
   id: string;
   name: string;
@@ -179,25 +180,34 @@ const MessagesList = () => {
               </View>
             </TouchableOpacity>
             <View className='flex-1'>
-              <Text
-                className='font-bold'
-                style={{
-                  color: isSelected(message.id)
-                    ? primary.foreground()
-                    : foreground(),
+              <Link
+                href={{
+                  pathname: '/messages/[id]',
+                  params: { id: message.id },
                 }}
               >
-                {message.name}
-              </Text>
-              <Text
-                style={{
-                  color: isSelected(message.id)
-                    ? primary.foreground()
-                    : foreground(),
-                }}
-              >
-                {message.message}
-              </Text>
+                <View>
+                  <Text
+                    className='font-bold mb-2'
+                    style={{
+                      color: isSelected(message.id)
+                        ? primary.foreground()
+                        : foreground(),
+                    }}
+                  >
+                    {message.name}
+                  </Text>
+                  <Text
+                    style={{
+                      color: isSelected(message.id)
+                        ? primary.foreground()
+                        : foreground(),
+                    }}
+                  >
+                    {message.message}
+                  </Text>
+                </View>
+              </Link>
             </View>
           </View>
         ))}

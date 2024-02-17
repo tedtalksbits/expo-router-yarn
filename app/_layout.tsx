@@ -52,7 +52,10 @@ function AppLayout() {
         <Slot />
       </SafeAreaView> */}
       <Stack>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+        {/* <Stack.Screen
+          name='/(drawer)/(tabs)'
+          options={{ headerShown: false, title: 'Messages' }}
+        /> */}
         <Stack.Screen
           name='index'
           options={{

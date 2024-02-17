@@ -15,15 +15,18 @@ export default function RootLayout() {
 
 function TabsLayout() {
   const { themeColors } = useTheme();
-  const { primary } = themeColors;
+  const { primary, accent, background } = themeColors;
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: primary.bg(),
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: accent.foreground(0.4),
+        tabBarStyle: {
+          backgroundColor: background(),
+        },
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        headerShown: false,
       }}
     >
       <Tabs.Screen
@@ -36,11 +39,11 @@ function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name='settings'
+        name='favorites'
         options={{
-          title: 'Settings',
+          title: 'Favorites',
           tabBarIcon: ({ color }) => (
-            <Ionicons name='settings' color={color} size={24} />
+            <Ionicons name='star' color={color} size={24} />
           ),
         }}
       />
