@@ -1,7 +1,7 @@
 import { Text } from '@/components/ui/Text';
 import { useTheme } from '@/hooks/useTheme';
 import { FontAwesome } from '@expo/vector-icons';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Animated, Dimensions, StyleSheet, View } from 'react-native';
 
 type ToastType = 'info' | 'success' | 'warning' | 'destructive';
@@ -93,12 +93,30 @@ const Toast = ({ toast, offset }: { toast: Toast; offset?: number }) => {
     destructive: destructive.bg(),
   }[type];
 
-  // animate toast in
-  Animated.timing(animation, {
-    toValue: 1,
-    duration: 200,
-    useNativeDriver: true,
-  }).start();
+  useEffect(() => {
+    // Start the animation when the component mounts
+    Animated.sequence([
+      // Step 1: Fade in and slide up
+      Animated.parallel([
+        Animated.timing(animation, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+  }, [animation, removeToast, toast.id]);
+
+  // Step 2: Fade out after 5 seconds
+  setTimeout(() => {
+    Animated.timing(animation, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      removeToast(toast.id);
+    });
+  }, 5000);
 
   // Calculate the Y position for slide animation
   const translateY = animation.interpolate({
@@ -106,10 +124,6 @@ const Toast = ({ toast, offset }: { toast: Toast; offset?: number }) => {
     outputRange: [20, 0], // Slide up from 20 to 0
   });
 
-  // remove toast after 5 seconds
-  setTimeout(() => {
-    removeToast(toast.id);
-  }, 5000);
   return (
     <Animated.View
       style={[
@@ -133,7 +147,13 @@ const Toast = ({ toast, offset }: { toast: Toast; offset?: number }) => {
       <View
         style={styles.iconContainer}
         onTouchStart={() => {
-          removeToast(toast.id);
+          Animated.timing(animation, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+          }).start(() => {
+            removeToast(toast.id);
+          });
         }}
       >
         <Text>
